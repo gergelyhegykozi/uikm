@@ -20,7 +20,7 @@ body {
 	font-weight: normal;
 	font-style: normal;
 }
-.icon-menu, .icon-wand, .icon-download, .icon-upload, .icon-folder-open, .icon-cog, .icon-plus {
+.icon-menu, .icon-wand, .icon-download, .icon-upload, .icon-folder-open, .icon-cog, .icon-plus, .icon-github {
 	font-family: 'uikit-maker';
 	speak: none;
 	font-style: normal;
@@ -50,4 +50,7 @@ body {
 }
 .icon-plus:before {
 	content: "\e006";
+}
+.icon-github:before {
+	content: "\e007";
 }
