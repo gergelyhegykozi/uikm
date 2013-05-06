@@ -1,0 +1,131 @@
+/* Toolbar */
+.toolbar {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.toolbar li {
+	display: inline-block;
+	margin: 0 15px 10px 0;
+}
+
+/* Buttons */
+.btn,
+button {
+	/* uikit-content: Button; */
+	background: #ccc;
+	border: 0;
+	display: inline-block;
+	position: relative;
+	padding: 10px 50px;	
+	color: rgba(0,0,0, .5);
+	text-align: center;
+	font-size: 14px;
+	text-decoration: none;
+}
+a.btn,
+button {
+	/* uikit-content: Button; */
+	cursor: pointer;
+}
+button:hover,
+a.btn:hover {
+	opacity: .8;
+}
+.btn.active {
+	/* uikit-content: Button; */
+	box-shadow: 0 0 3px 0 #000;
+}
+button.emphasised,
+.btn.emphasised {
+	/* uikit-content: Button; */
+	background: lightgreen;
+}
+.btn.control {
+	/* uikit-content: Button; */
+	background: lightskyblue;
+}
+
+/* Disabled elem */
+.disabled {
+	opacity: .5;
+}
+
+/* Field */
+fieldset {
+	border: 1px solid #000;
+	margin: 20px 0;
+	padding-top: 40px;
+	position: relative;
+}
+fieldset legend {
+	/* uikit-content: Legend; */
+	border: 1px solid #000;	
+	border-left: 0;
+	border-top: 0;
+	background: #fff;
+	left: 0;
+	position: absolute;
+	top: 0;
+	padding: 5px;
+	font-size: 18px;
+}
+.field-label {
+	/* uikit-content: Field label; */	
+	display: block;
+	margin-bottom: .5%;
+}
+
+input.field {	
+	border: 1px dashed #000;
+	margin-bottom: .5%;
+	padding: 10px;
+	width: 100%;
+}
+
+.dropzone {
+	/* uikit-amount: 4; */
+	/* uikit-content: Dropzone; */	
+	background: #fff;
+	border: 1px dashed #000;
+	margin-top: -1px;
+	color: #000;
+}
+.dragover .dropzone {	
+	border-color: #fff;
+	background: #ccc;
+	color: #fff;
+}
+
+/* Table */
+table {
+	border-spacing:0;
+	border-collapse:collapse;	
+	table-layout: fixed;
+	width: 100%;
+}
+table tr.header th {
+	/* uikit-amount: 4; */
+	/* uikit-content: Table header; */	
+	background: #ccc;
+	text-align: left;
+	color: #555;
+}
+table tr {
+	/* uikit-amount: 4; */
+}
+table tr td {
+	/* uikit-amount: 4; */
+	/* uikit-content: Cell content; */
+}
+table tr td,
+table tr th {
+	/* uikit-content: Button; */	
+	border: 1px solid #000;
+	padding: 5px;
+	word-wrap: break-word;
+}
+table tr td.edit-cell .btn,
+table tr td.delete-cell .btn {
+	width: 100%;
+}
