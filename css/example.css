@@ -1,37 +1,37 @@
 /* Button */
 a.btn,
 button {
-	/* uikit-amount: 4; */
-	/* uikit-content: Button; */
-	background: #fff;
-	border: 1px solid #000;
-	display: inline-block;
-	margin: 0;
-	padding: 10px;
-	font-size: 12px;
+    /* uikit-amount: 4; */
+    /* uikit-content: Button; */
+    background: #fff;
+    border: 1px solid #000;
+    display: inline-block;
+    margin: 0;
+    padding: 10px;
+    font-size: 12px;
 }
 a.btn:hover,
 button:hover {
-	background: #ccc;
+    background: #ccc;
 }
 
 /* Toolbar */
 .toolbar {
-	background: lightblue;
-	padding: 10px;
-	font-size: 0;
+    background: lightblue;
+    padding: 10px;
+    font-size: 0;
 }
 .toolbar a.btn,
-.toolbar button {	
-	/* uikit-amount: 4; */
-	/* uikit-content: Button; */	
-	border-left: 10px solid #000;
-	margin-right: 10px;
+.toolbar button {   
+    /* uikit-amount: 4; */
+    /* uikit-content: Button; */    
+    border-left: 10px solid #000;
+    margin-right: 10px;
 }
 
 .gallery-toolbar img {
-	/* uikit-amount: 4; */
-	margin: 0 10px 0 0; 
-	height: 50px;
-	width: 50px;
+    /* uikit-amount: 4; */
+    margin: 0 10px 0 0; 
+    height: 50px;
+    width: 50px;
 }
