@@ -23,6 +23,9 @@
 				<li id="menu" ng-click="toggleNavigation()" title="Menu" class="icon-menu"></li>
 				<li ng-repeat="navigationElem in mainNavigation" ng-click="navigationElem.disabled || setIndex($index)" title="{{navigationElem.title}}" class="{{navigationElem.icon}}" ng-class="{active: mainNavigation.active == $index, disabled: navigationElem.disabled}"></li>
 			</ul>
+            <ul id="contact-navigation">
+                <li><a class="icon-github" href="https://github.com/leonuh/uikm"></a></li>
+            </ul>
 		</header>
 
         <article id="main-content">
