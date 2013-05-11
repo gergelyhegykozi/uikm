@@ -29,7 +29,7 @@
     opacity: .8;
 }
 #main-header #main-navigation { 
-    position: fixed;
+    position: absolute;
     left: 0;
     right: 0;
     top: 0;
@@ -59,7 +59,7 @@
 #main-header #contact-navigation {
     margin: 0;
     padding: 0;
-    position: fixed;
+    position: absolute;
     left: 17px;
     right: 0;
     top: 69px;
@@ -84,6 +84,42 @@
 #main-header #contact-navigation li a:hover {
     border-color: #555;
     color: #555;
+}
+
+#try-it {
+    left: 10px;
+    position: absolute;
+    top: 200px;
+    color: #999;
+    font-size: 20px;
+    font-weight: normal;
+}
+#try-it:before {
+    border-radius: 50% 50% 0 0;
+    content: '';
+    position: absolute;
+    height: 40px;
+    width: 120px;
+    border: 2px solid transparent;
+    border-top-color: #999;
+    -webkit-transform: rotate(-40deg);
+    -moz-transform: rotate(-40deg);
+    transform: rotate(-40deg);
+    left: 20%;
+    top: -60px;
+}
+#try-it:after {
+    content: '';
+    height: 0;
+    position: absolute;
+    width: 0;
+    border: 10px solid transparent;
+    border-left-color: #999;
+    left: 204%;
+    top: -92px;
+    -webkit-transform: rotate(-15deg);
+    -moz-transform: rotate(-15deg);
+    transform: rotate(-15deg);
 }
 
 #main-content {
@@ -152,6 +188,9 @@
     top: 0;
     width: 100%;    
 }
+.page h1 {
+    margin-top: 10px;
+}
 
 /* Dropzone */
 .css-upload {
@@ -165,7 +204,7 @@
 .css-upload:first-child {
     margin-top: 0;
 }
-.css-upload h1 {
+.css-upload h2 {
     /* uikit-content: Upload; */
     left: 0;
     margin-top: -75px;
@@ -191,11 +230,6 @@
     list-style-type: none;
     padding: 10px;
     color: #555;
-    opacity: 0;
-    transition: opacity .2s;
-}
-.css-upload.drop li {
-    opacity: 1;
 }
 
 
@@ -208,7 +242,7 @@
     border-color: #555;
 }
 #main-header.active:before {
-    height: 260px;
+    height: 380px;
 }
 #main-header.active #main-navigation li {
     -webkit-transform: rotate(360deg);

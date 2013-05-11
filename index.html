@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="description" content="UI kit generator to handle huge css components">
 
-        <title>UI kit maker</title>
+        <title>UI kit maker (uikm)</title>
 
         <link rel="stylesheet" href="css/base.css" />
         <link rel="stylesheet" href="css/layout.css" />
@@ -12,13 +13,18 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
         <script src="js/vendors/localStorageModule.js"></script>
-        <script src="js/controllers.js"></script>
-        <script src="js/modules.js"></script>
+        <script>
+            //Init ui-kit module
+            var uikitModule = angular.module('uikit-maker', ['LocalStorageModule']);
+        </script>
+        <script src="js/uikitDirectives.js"></script>
+        <script src="js/uikitFactories.js"></script>
+        <script src="js/controllers.js"></script>        
     </head>
     <body ng-controller="Main">
 
         <header id="main-header" ng-class="{active: mainNavigation.on}">
-            <h1><a href="/">uikit maker 0.0.1</a></h1>
+            <h1><a href="http://leonuh.github.io/uikm/">uikit maker 0.1.0</a></h1>
             <ul id="main-navigation" class="toolbar">
                 <li id="menu" ng-click="toggleNavigation()" title="Menu" class="icon-menu"></li>
                 <li ng-repeat="navigationElem in mainNavigation" ng-click="navigationElem.disabled || setIndex($index)" title="{{navigationElem.title}}" class="{{navigationElem.icon}}" ng-class="{active: mainNavigation.active == $index, disabled: navigationElem.disabled}"></li>
@@ -26,6 +32,7 @@
             <ul id="contact-navigation">
                 <li><a class="icon-github" href="https://github.com/leonuh/uikm"></a></li>
             </ul>
+            <strong id="try-it">Try it!</strong>
         </header>
 
         <article id="main-content">
@@ -36,20 +43,14 @@
                 <li>Less css - trash code</li>
                 <li>Fast representation for preview requests</li>
                 <li>Help to keep consistent with the team and yourself</li>
+                <li>Easy to create your own css tests</li>
+                <li>Produce css code with better quality</li>
             </ul>
         </article>
 
         <!-- PAGES -->
         <div id="pages" ng-class="{active: mainNavigation.on, menuActive: mainNavigation.active != -1}">
             <section class="page" ng-class="{active: mainNavigation.active == 0}">
-                <div class="css-upload" dropzone dropcssbase>
-                    <h1 class="dropzone">Drop CSS files for base style</h1>
-                    <ul>
-                        <li ng-repeat="file in cssbasefiles">
-                            {{file.name}}
-                        </li>
-                    </ul>           
-                </div>
                 <p>You can specify selectors settings in css, otherwise your generated contents will be empty.</p>
                 <div>
                     <ul>
@@ -58,15 +59,23 @@
                     </ul>
                     <p>Try it:</p>                    
                     <ol>
-                        <li><a download="demo.css" href="css/example.css">Download</a> the demo file</li>
-                        <li>Drop it to the box</li>
+                        <li><a href="css/example.css">Download</a> the demo file</li>
+                        <li>Drop it into the "UI kit" box (The first one is only for styling and the second one is for styling and markup rendering)</li>
                         <li>Use the wand and Generate UI</li>
                     </ol>
-                </div>
-                <div class="css-upload" dropzone dropcssmain>
-                    <h1 class="dropzone">Drop CSS files for UI kit</h1>
+                </div>                
+                <div class="css-upload" dropzone dropcss="cssBase">
+                    <h2 class="dropzone">Drop CSS files for base style</h1>
                     <ul>
-                        <li ng-repeat="file in cssmainfiles">
+                        <li ng-repeat="file in cssfiles.cssBase">
+                            {{file.name}}
+                        </li>
+                    </ul>           
+                </div>
+                <div class="css-upload" dropzone dropcss="cssMain">
+                    <h2 class="dropzone">Drop CSS files for UI kit</h1>
+                    <ul>
+                        <li ng-repeat="file in cssfiles.cssMain">
                             {{file.name}}
                         </li>
                     </ul>           
@@ -113,6 +122,32 @@
             </section>
 
             <section generatekit class="generated-page page" ng-class="{active: mainNavigation.active == 2}"></section>
+
+            <section class="page" ng-class="{active: mainNavigation.active == 3}">
+
+                <h1>Import UI kit</h1>
+
+                <div class="css-upload" dropzone importkit>
+                    <h2 class="dropzone">Drop "*.uikit" file</h2>
+                    <ul>
+                        <li ng-repeat="file in uikitfiles">
+                            {{file.name}}
+                        </li>
+                    </ul>           
+                </div>                 
+
+            </section>
+
+            <section ng-controller="Export" class="page" ng-class="{active: mainNavigation.active == 4}">
+
+                <h1>Export UI kit</h1>            
+
+                <label for="export-name" class="field-label">File name</label>
+                <input id="export-name" ng-model="downloadName" class="field" type="text" required="required" />                   
+
+                <a href="{{downloadUrl}}" download="{{downloadName}}.uikit" class="btn emphasised" type="submit">Download UI kit config</a>
+
+            </section>            
 
         </div>
 
