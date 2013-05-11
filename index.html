@@ -15,7 +15,9 @@
         <script src="js/vendors/localStorageModule.js"></script>
         <script>
             //Init ui-kit module
-            var uikitModule = angular.module('uikit-maker', ['LocalStorageModule']);
+            var uikitModule = angular.module('uikit-maker', ['LocalStorageModule'], function ($compileProvider) {
+                $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|blob):/);
+            });
         </script>
         <script src="js/uikitDirectives.js"></script>
         <script src="js/uikitFactories.js"></script>
@@ -145,7 +147,7 @@
                 <label for="export-name" class="field-label">File name</label>
                 <input id="export-name" ng-model="downloadName" class="field" type="text" required="required" />                   
 
-                <a href="{{downloadUrl}}" download="{{downloadName}}.uikit" class="btn emphasised" type="submit">Download UI kit config</a>
+                <a href="{{downloadUrl}}" ng-click="window.open(downloadUrl);" download="{{downloadName}}.uikit" class="btn emphasised" type="submit">Download UI kit config</a>
 
             </section>            
 
