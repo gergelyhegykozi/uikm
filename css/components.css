@@ -16,6 +16,7 @@ button {
     background: #ccc;
     border: 0;
     display: inline-block;
+    margin: 0;
     position: relative;
     padding: 10px 50px; 
     color: rgba(0,0,0, .5);

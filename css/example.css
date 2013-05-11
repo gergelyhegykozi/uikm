@@ -1,13 +1,24 @@
+body {
+    background: #555; 
+    font-family: serif;   
+}
+
 /* Button */
 a.btn,
 button {
-    /* uikit-amount: 4; */
-    /* uikit-content: Button; */
-    background: #fff;
-    border: 1px solid #000;
+    /* uikit-content: Button; */    
+    background: -webkit-linear-gradient(#eee, #aaa);
+    background: -moz-linear-gradient(#eee, #aaa);
+    background: linear-gradient(#eee, #aaa);
+    border: 0;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 0 rgba(0,0,0, .5);    
+    cursor: pointer;
     display: inline-block;
     margin: 0;
     padding: 10px;
+    color: #555;
+    font-family: serif;
     font-size: 12px;
 }
 a.btn:hover,
@@ -17,7 +28,7 @@ button:hover {
 
 /* Toolbar */
 .toolbar {
-    background: lightblue;
+    background: lightslategray;
     padding: 10px;
     font-size: 0;
 }
@@ -25,12 +36,13 @@ button:hover {
 .toolbar button {   
     /* uikit-amount: 4; */
     /* uikit-content: Button; */    
-    border-left: 10px solid #000;
+    border: 5px solid #999;
     margin-right: 10px;
 }
 
 .gallery-toolbar img {
     /* uikit-amount: 4; */
+    box-shadow: 1px 1px 2px 0 rgba(0,0,0, .5);;
     margin: 0 10px 0 0; 
     height: 50px;
     width: 50px;

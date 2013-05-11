@@ -1,20 +1,30 @@
 'use strict';
 
+/**********************
+Navigation and page behavior
+**********************/
 function Main($scope, dropcsskitService) {
+    $scope.cssfiles = [];
+
     $scope.mainNavigation = [
         {title: 'Import CSS files', icon: 'icon-folder-open'},
         {title: 'Add Selectors', icon: 'icon-plus'},
         {title: 'Generate UI kit (click to refresh from local files)', icon: "icon-wand"},
-        {title: 'Import (Function is not working yet)', icon: "icon-upload", disabled: true},
-        {title: 'Export (Function is not working yet)', icon: "icon-download", disabled: true}
+        {title: 'Import', icon: "icon-upload"},
+        {title: 'Export', icon: "icon-download"}
     ];
     $scope.mainNavigation.active = -1;
 
     $scope.setIndex = function(index) {
         $scope.mainNavigation.active = index;
         if(index === 2) {
-            dropcsskitService.generate();
+            //Call generator behavior
+            $scope.$broadcast('generate');
         }
+        if(index === 4) {
+            //Go to Export controller
+            $scope.$broadcast('export');
+        }        
     }
 
     $scope.toggleNavigation = function() {
@@ -26,6 +36,9 @@ function Main($scope, dropcsskitService) {
 }
 Main.$inject = ['$scope', 'dropcsskitService'];
 
+/**********************
+Config behavior
+**********************/
 function Selectors($scope, dropcsskitService) {
 
     var changeTo = function(type) {
@@ -85,5 +98,32 @@ function Selectors($scope, dropcsskitService) {
 
         changeTo('add');
     };  
+
+    //Imported uikit config
+    $scope.$on('syncconfig', function() {
+        changeTo('add');
+        $scope.selectors = dropcsskitService.generated.cssCustom;
+    });
 }
 Selectors.$inject = ['$scope', 'dropcsskitService'];
+
+/**********************
+Export behavior
+**********************/
+function Export($scope, dropcsskitService) {
+    
+    $scope.$on('export', function() {                  
+
+        var content = {
+                cssBase: dropcsskitService.generated.cssBase,
+                cssMain: dropcsskitService.generated.cssMain,
+                cssCustom: dropcsskitService.generated.cssCustom
+            },
+            blob = new Blob([angular.toJson(content)], {type : 'text/json'});
+
+        $scope.downloadUrl = window.URL.createObjectURL(blob);
+
+    });   
+
+}
+Export.$inject = ['$scope', 'dropcsskitService'];

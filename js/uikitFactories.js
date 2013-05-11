@@ -1,56 +1,14 @@
 'use strict';
-// Dropzone
-var uikitModule = angular.module('uikit-maker', ['LocalStorageModule']);
 
 /**********************
-Focus behavior after upload
+CSS Upload factory
 **********************/
-uikitModule.directive('focus', function() {
-    return function(scope, element, attrs) {
-       scope.$watch(attrs.focus,
-         function (newValue) {
-            element[0].focus();
-         },true);
-      };    
-});
-
-/**********************
-Dropzone style behavior
-**********************/
-uikitModule.directive("dropzone", function() {
-    return {
-        restrict : "A",
-        link: function (scope, elem, attrs) {
-            elem.bind('dragover', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                elem.addClass('dragover');      
-            });
-            elem.bind('dragleave', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                elem.removeClass('dragover');       
-            });
-            elem.bind('drop', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-
-                elem.removeClass('dragover');   
-                elem.addClass('drop');          
-            });
-        }
-    }
-});
-
-/**********************
-CSS Upload service and directives
-**********************/
-
-//Service for communation
 uikitModule.factory('dropcsskitService', function($rootScope) {
 
+    //Private helpers and cache objects
     var selectorPackage = [],
         fullSelectorPackage = [],
+        //Recursive core mechanism to create the main selectorObj which contain every important information
         extend = function(selectorObj, newSelectorObj) {
             var canMerge = selectorObj.coreProto.root.name === newSelectorObj.coreProto.root.name,
                 unitMerger = function(selectorObj, newSelectorObj) {                                        
@@ -172,16 +130,29 @@ uikitModule.factory('dropcsskitService', function($rootScope) {
             }
         };
 
+    //Public functions and objects
     return {
-        generate: function() {
-            $rootScope.$broadcast('generate');
-        },
         generated: {
             cssObj: {},
-            cssBase: '',
-            cssMain: '',
-            cssCustom: ''
-        },                  
+            cssBase: [],
+            cssMain: [],
+            cssCustom: []
+        },
+        //Sync dropped files to service
+        syncFile: function(type, name, content) {
+            var found = false,
+                self = this;
+            angular.forEach(self.generated[type], function(fileObj, i) {
+                if(fileObj.name === name) {
+                    self.generated[type][i].content = content;
+                    found = true;
+                    return false;
+                }
+            });
+            if(!found) {
+                self.generated[type].push({name: name, content: content});
+            }
+        },
         //Merge to center section
         add: function(newSelectorObj, isImport) {
             var merged = false;
@@ -208,6 +179,19 @@ uikitModule.factory('dropcsskitService', function($rootScope) {
             //Upload generated css to Service
             this.generated.cssObj = fullSelectorPackage;
         },
+        reset: function() {
+            fullSelectorPackage = [];
+            this.generated.cssObj = {};
+        },
+        fullReset: function() {
+            fullSelectorPackage = [];
+            this.generated = {
+                cssObj: {},
+                cssBase: [],
+                cssMain: [],
+                cssCustom: []           
+            };
+        },        
         syncCssToObj: function(source, isImport) {
             var self = this;
 
@@ -217,9 +201,6 @@ uikitModule.factory('dropcsskitService', function($rootScope) {
                     return angular.extend({}, selectorObj);
                 });
             }
-
-            //Upload service var
-            this.generated.cssMain += source;
 
             //Split css definitions
             //.replace(/(\/\*.*?\*\/)/g,'')
@@ -314,162 +295,4 @@ uikitModule.factory('dropcsskitService', function($rootScope) {
 
         }
     };
-});
-
-
-//Parsing Base files
-uikitModule.directive("dropcssbase", function(dropcsskitService) {
-    return {
-        restrict : "A",
-        link: function (scope, elem, attrs) {                               
-            elem.bind('drop', function(e) {             
-                var files = e.dataTransfer.files,
-                    cssfiles = [];
-
-                //Reset service var
-                dropcsskitService.generated.cssBase = '';
-
-                //Files             
-                for (var i = 0, f; f = files[i]; i++) {
-                    //Only css
-                    if (f.type !== 'text/css') {
-                        continue;
-                    }                   
-                    cssfiles.push({name: files[i].name});
-                    var reader = new FileReader();
-
-                    // Closure to capture the file information.
-                    reader.onload = function(e) {
-
-                        //Upload service var
-                        dropcsskitService.generated.cssBase += e.target.result;
-
-                    };                  
-                    // Read in the image file as a data URL.
-                    reader.readAsText(f, 'UTF-8');                  
-                }              
-
-                scope.$apply(function() {
-                    scope.cssbasefiles = cssfiles;
-                });
-
-            });
-        }
-    };
-});
-
-//Parsing Main files
-uikitModule.directive("dropcssmain", function(dropcsskitService) {
-    return {
-        restrict : "A",
-        link: function (scope, elem, attrs) {                               
-            elem.bind('drop', function(e) {             
-                var files = e.dataTransfer.files,
-                    cssfiles = [];
-
-                //Reset service var
-                dropcsskitService.generated.cssMain = '';
-
-                //Files             
-                for (var i = 0, f; f = files[i]; i++) {
-                    //Only css
-                    if (f.type !== 'text/css') {
-                        continue;
-                    }                   
-                    cssfiles.push({name: files[i].name});
-                    var reader = new FileReader();
-
-                    // Closure to capture the file information.
-                    reader.onload = function(e) {
-                        
-                        dropcsskitService.syncCssToObj(e.target.result, true);
-                                            
-                    };                  
-                    // Read in the image file as a data URL.
-                    reader.readAsText(f, 'UTF-8');                  
-                }   
-
-                scope.$apply(function() {
-                    scope.cssmainfiles = cssfiles;
-                });
-            });
-        }
-    }
-});
-
-//Generate contents and init special generating tags
-uikitModule.directive("generatekit", function($compile, dropcsskitService, localStorageService) {
-    
-    //Selectors map
-    var processCss = function(currentSelectors, firstInit) {
-            var content = '';
-
-            angular.forEach(currentSelectors, function(selectorObj) {
-                var currentElement,
-                    currentContent = '';                    
-
-                currentElement = '<' + selectorObj.tag;                                     
-
-                //Attributes map
-                angular.forEach(selectorObj.attributes, function(attr) {
-                    currentElement += ' ' + attr.name + '="' + attr.value + '"';
-                });    
-
-                currentElement += '>';
-
-                currentElement += processCss(selectorObj.childSelectors);
-
-                //Selectors amount
-                if(['img', 'input', 'br', 'hr'].indexOf(selectorObj.tag) === -1) {
-                    currentElement += selectorObj.uikitCfg.content + '</' + selectorObj.tag + '>';                  
-                }
-
-                for(var i = 0; i < selectorObj.uikitCfg.amount; i++) {
-                    currentContent += currentElement;
-                }
-
-                if(firstInit) {
-                    content += '<div style="position: relative; margin: 5px 0;">' + currentContent + '</div>';  
-                } else {
-                    content += currentContent;  
-                }
-                
-            });
-
-            return content;
-        },
-        syncConfig = function() {
-            //Trasform config to css
-            var customCss = '';
-            angular.forEach(dropcsskitService.generated.cssCustom, function(selectorCfg) {
-                customCss += selectorCfg.name +
-                    '{ ' +
-                        '/* uikit-amount: ' + selectorCfg.amount  + '; */ ' +
-                        '/* uikit-content: ' + selectorCfg.content  + '; */ ' +
-                    '} ';
-            });
-
-            dropcsskitService.syncCssToObj(customCss);
-        };
-
-    return {
-        restrict : "A",
-        link: function (scope, element, attrs) {
-
-            scope.$on('generate', function() {                  
-
-                //Sync custom config to service
-                syncConfig();
-
-                //Add content to localstorage
-                localStorageService.add('uikit-content', '<style>' + dropcsskitService.generated.cssBase + dropcsskitService.generated.cssMain + '</style>' + processCss(dropcsskitService.generated.cssObj, true));
-
-                //Render iframe
-                element.html('<iframe src="uikit.html"></iframe>');
-                $compile(element.contents())(scope);                                            
-
-            });         
-
-        }
-    }
 });
